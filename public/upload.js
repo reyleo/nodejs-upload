@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
 
 function uploadImage() {
 	if (this.files.length > 0) {
-		var uploader = new Uploader(this.files[0], document.getElementById('uploadStatus'));
+		var uploader = new Uploader(this.files, document.getElementById('uploadStatus'));
 	}
 }
 
@@ -38,7 +38,7 @@ Progress.prototype.remove = function() {
 	this.obj.parentNode.removeChild(this.obj);
 }
 
-function Uploader(file, parent) {
+function Uploader(files, parent) {
 	var xhr = new XMLHttpRequest();
 	this.ctrl = new Progress(parent);
 	var self = this;
@@ -59,7 +59,8 @@ function Uploader(file, parent) {
 	}, false);	
 
 	var data = new FormData();
-	data.append('photo', file);
+	Array.from(files).forEach((f => data.append('photos', f)));
+
 
 	xhr.open('POST', '/upload', true);
 	xhr.send(data);
