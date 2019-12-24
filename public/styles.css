@@ -1,0 +1,16 @@
+.progress-bar-outer {
+	width: 100%;
+	position: relative;
+	height: 4em;
+	margin-top: 1em;
+	background-color: #ddd;
+}
+.progress-bar-inner {
+	display: inline-block;
+	width: 0;
+	height: 4em;
+	border-radius: 1em;
+	background-color: green;
+	font-size: 1em;
+	padding: 1em;
+}
