@@ -12,11 +12,17 @@ var storage = multer.diskStorage({
 			+ pad(now.getDate(), 2) + '_' 
 			+ pad(now.getHours(), 2) + pad(now.getMinutes(), 2) + pad(now.getSeconds(), 2)
 			+ '_' + randomCode(4);
-		callback(null, 'upload-' + timestamp + extension(file.mimetype));
+
+		let ext = extension(file.mimetype);
+		if (ext === '') {
+			callback(null, file.originalname)
+		} else {
+			callback(null, 'upload-' + timestamp + ext);
+		}
 	}
 });
 var upload = multer({ storage: storage}).array('photos');
-const RANDOMS = 'abcdefghijklmnoprstuvwxyz0123456789'
+const RANDOMS = 'abcdefghijklmnopqrstuvwxyz0123456789'
 
 function randomCode(len) {
 	let code = '';
@@ -39,6 +45,7 @@ function extension(mime) {
 	switch(mime) {
 		case 'image/jpeg': return '.jpg';
 		case 'image/png': return '.png';
+		case 'video/mp4': return '.mp4';
 	}
 	return '';
 }
