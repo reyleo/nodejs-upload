@@ -3,21 +3,23 @@ var multer  = require("multer");
 var path = require("path");
 var app = express();
 
-var uploadPath = 'M:\\PhotoExport\\!Uploads'
+const uploadPath = 'M:\\PhotoExport\\!Uploads';
+const keepOriginalName = true;
+
 var storage = multer.diskStorage({
 	destination: uploadPath,
 	filename: function(req, file, callback) {
-		var now = new Date();
-		var timestamp = '' + now.getFullYear() + pad((now.getMonth() + 1), 2)
-			+ pad(now.getDate(), 2) + '_' 
-			+ pad(now.getHours(), 2) + pad(now.getMinutes(), 2) + pad(now.getSeconds(), 2)
-			+ '_' + randomCode(4);
-
+		if (keepOriginalName) {
+			callback(null, file.originalname);
+			return;
+		}
+		
+		let filename = timestamp() + '_' + randomCode(4);
 		let ext = extension(file.mimetype);
 		if (ext === '') {
 			callback(null, file.originalname)
 		} else {
-			callback(null, 'upload-' + timestamp + ext);
+			callback(null, `upload-${filename}.${ext}`);
 		}
 	}
 });
@@ -33,19 +35,26 @@ function randomCode(len) {
 	return code;
 }
 
+function timestamp() {
+	let now = new Date();
+	return '' + now.getFullYear() + pad((now.getMonth() + 1), 2)
+		+ pad(now.getDate(), 2) + '_' 
+		+ pad(now.getHours(), 2) + pad(now.getMinutes(), 2) + pad(now.getSeconds(), 2);
+}
+
 function pad(v, n) {
-	var s = new String(v);
-	var l = s.length;
-	var p = '';
+	let s = new String(v);
+	let l = s.length;
+	let p = '';
 	while (l++ < n) p += '0';
 	return p + s; 
 } 
 
 function extension(mime) {
 	switch(mime) {
-		case 'image/jpeg': return '.jpg';
-		case 'image/png': return '.png';
-		case 'video/mp4': return '.mp4';
+		case 'image/jpeg': return 'jpg';
+		case 'image/png': return 'png';
+		case 'video/mp4': return 'mp4';
 	}
 	return '';
 }
