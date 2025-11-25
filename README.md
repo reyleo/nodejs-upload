@@ -8,7 +8,6 @@ Simple image uploader based on express and multer.
 * `git clone`
 * `cd nodejs-upload`
 * install dependencies with `npm install`
-* edit variable "uploadPath" in server.js
-* start with command `node server.js`
+* start with command `node server.js <upload-directory>`
 * open browser at http://your-pc-name:8080/upload
 
