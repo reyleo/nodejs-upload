@@ -1,14 +1,19 @@
-var express = require("express");
-var multer  = require("multer");
-var path = require("path");
-var app = express();
+import express from 'express';
+import multer from 'multer';
+import path from 'path';
+const app = express();
 
-const uploadPath = 'M:\\PhotoExport\\!Uploads';
+const uploadPath = process.argv.length > 2 ? process.argv[2] : "";
+if (!uploadPath) {
+	console.error("Error: Please provide an upload path as the first argument.");
+	process.exit(1);
+}
+
 const keepOriginalName = true;
 
 var storage = multer.diskStorage({
 	destination: uploadPath,
-	filename: function(req, file, callback) {
+	filename: function(_req, file, callback) {
 		if (keepOriginalName) {
 			callback(null, file.originalname);
 			return;
@@ -59,10 +64,10 @@ function extension(mime) {
 	return '';
 }
 
-app.use('/public', express.static(__dirname + '/public'));
+app.use('/public', express.static(path.dirname + '/public'));
 
-app.get('/upload', function (req, res) {
-	res.sendFile(__dirname + path.sep + 'index.html');
+app.get('/upload', function (_req, res) {
+	res.sendFile(path.dirname + path.sep + 'index.html');
 });
 
 app.post('/upload', function(req, res) {	
